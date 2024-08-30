@@ -1015,13 +1015,550 @@ print(response.status_code)  # 输出响应状态码，如 200
 4. 在主程序中从用户输入获取矩阵元素，并将其转换为`numpy`数组。
 
 ## 4. 面向对象编程基础
-   - **类与对象**
-     - 定义类
-     - 实例化对象
-     - 类的属性与方法
-   - **继承与多态**
-   - **封装与私有属性**
-   - **类的魔术方法（如 `__init__`，`__str__`）**
+
+面向对象编程（Object-Oriented Programming, OOP）是Python编程中的一种重要范式，它通过类和对象组织代码，使程序更易于维护、扩展和理解。本章将介绍面向对象编程的基础知识，包括类与对象的定义、继承、多态、封装，以及类的魔术方法。
+
+### 4.1 类与对象
+
+#### 4.1.1 定义类
+
+在Python中，类通过`class`关键字来定义。类是对象的蓝图或模板，它定义了该类对象的属性和方法。类的通用定义格式如下：
+
+```python
+class ClassName:
+    def __init__(self, attribute1, attribute2):
+        self.attribute1 = attribute1
+        self.attribute2 = attribute2
+    
+    def method1(self):
+        # 方法体
+        pass
+    
+    def method2(self, param):
+        # 方法体
+        pass
+```
+
+**示例**:
+
+```python
+class Dog:
+    def __init__(self, name, breed, age):
+        self.name = name
+        self.breed = breed
+        self.age = age
+    
+    def bark(self):
+        print(f"{self.name} is barking!")
+    
+    def describe(self):
+        print(f"{self.name} is a {self.age}-year-old {self.breed}.")
+```
+
+在这个示例中，我们定义了一个名为`Dog`的类，它具有三个属性：`name`（名字）、`breed`（品种）和`age`（年龄）。此外，`Dog`类还定义了两个方法：`bark()`和`describe()`。`bark()`方法输出狗的叫声，而`describe()`方法输出狗的详细信息。
+
+#### 4.1.2 实例化对象
+
+类的实例化是指使用类来创建对象。对象是类的具体实现，包含类定义的属性和方法。实例化对象的通用格式如下：
+
+```python
+object_name = ClassName(arguments)
+```
+
+**示例**:
+
+```python
+my_dog = Dog("Buddy", "Golden Retriever", 3)
+```
+
+在这个示例中，我们通过`Dog`类创建了一个名为`my_dog`的对象。该对象的`name`属性为`Buddy`，`breed`属性为`Golden Retriever`，`age`属性为3岁。
+
+#### 4.1.3 类的属性与方法
+
+类的属性是对象的特征，方法是对象的行为。属性通常在类的`__init__`方法中定义，而方法则是在类内部定义的函数。调用对象的方法的通用格式如下：
+
+```python
+object_name.method_name(arguments)
+```
+
+**示例**:
+
+```python
+my_dog.bark()  # 输出: Buddy is barking!
+my_dog.describe()  # 输出: Buddy is a 3-year-old Golden Retriever.
+```
+
+在这个示例中，我们调用了`my_dog`对象的`bark()`和`describe()`方法，分别输出了狗的叫声和详细信息。
+
+**进一步扩展**:
+
+你可以为类添加更多的方法，甚至可以让某些方法改变对象的属性。
+
+```python
+class Dog:
+    def __init__(self, name, breed, age):
+        self.name = name
+        self.breed = breed
+        self.age = age
+    
+    def bark(self):
+        print(f"{self.name} is barking!")
+    
+    def describe(self):
+        print(f"{self.name} is a {self.age}-year-old {self.breed}.")
+    
+    def celebrate_birthday(self):
+        self.age += 1
+        print(f"Happy Birthday, {self.name}! You are now {self.age} years old.")
+```
+
+现在我们可以让狗庆祝生日，看看它的年龄变化：
+
+```python
+my_dog.celebrate_birthday()  # 输出: Happy Birthday, Buddy! You are now 4 years old.
+my_dog.describe()  # 输出: Buddy is a 4-year-old Golden Retriever.
+```
+
+通过这个例子，我们展示了如何通过方法改变对象的属性。
+
+### 4.2 继承与多态
+
+#### 4.2.1 继承
+
+继承是面向对象编程中的一个重要特性，它允许一个类继承另一个类的属性和方法。被继承的类称为父类或基类，继承的类称为子类或派生类。继承的通用格式如下：
+
+```python
+class ChildClass(ParentClass):
+    # 子类的定义
+    pass
+```
+
+**示例**:
+
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+```
+
+在这个示例中，我们定义了一个`Animal`类，作为所有动物的基类。然后，我们定义了两个子类：`Dog`和`Cat`，它们分别继承了`Animal`类并重写了`speak()`方法。
+
+```python
+dog = Dog("Buddy")
+cat = Cat("Whiskers")
+
+print(dog.speak())  # 输出: Buddy says Woof!
+print(cat.speak())  # 输出: Whiskers says Meow!
+```
+
+子类可以继承父类的方法，并根据需要进行重写，定义自己的行为。
+
+#### 4.2.2 多态
+
+多态是指不同类的对象可以通过相同的接口调用不同的方法。即使是不同的类，它们的方法可以具有相同的名称，但实现不同的行为。
+
+**示例**:
+
+```python
+animals = [Dog("Buddy"), Cat("Whiskers")]
+
+for animal in animals:
+    print(animal.speak())
+```
+
+在这个示例中，`Dog`和`Cat`类都继承了`Animal`类，并且都实现了`speak()`方法。尽管我们在循环中使用了相同的方法名`speak()`，但不同的对象会执行不同的行为。
+
+```python
+# 输出:
+# Buddy says Woof!
+# Whiskers says Meow!
+```
+
+多态性使代码更加灵活，可以轻松处理不同类型的对象。
+
+### 4.3 封装与私有属性
+
+封装是将对象的状态（属性）隐藏在类的内部，只允许通过类的方法访问或修改。这一特性可以防止外部代码直接修改对象的内部状态。
+
+在Python中，通过在属性名前加下划线`_`或双下划线`__`可以实现属性的私有化。
+
+**示例**:
+
+```python
+class Car:
+    def __init__(self, model, year):
+        self._model = model  # 受保护的属性
+        self.__year = year  # 私有属性
+    
+    def get_year(self):
+        return self.__year
+
+    def set_year(self, year):
+        if year > 1886:  # 1886是第一辆现代汽车的发明年份
+            self.__year = year
+        else:
+            print("Year is invalid.")
+```
+
+在这个示例中，`_model`是受保护的属性，`__year`是私有属性。私有属性只能通过类的方法访问或修改，不能直接从类的外部访问。
+
+```python
+my_car = Car("Toyota", 2020)
+
+# 试图直接访问私有属性会失败
+print(my_car.__year)  # AttributeError: 'Car' object has no attribute '__year'
+
+# 通过方法访问私有属性
+print(my_car.get_year())  # 输出: 2020
+
+# 修改私有属性
+my_car.set_year(2022)
+print(my_car.get_year())  # 输出: 2022
+```
+
+封装可以保护对象的内部状态不被外部代码直接更改，保证数据的安全性和完整性。
+
+### 4.4 类的魔术方法
+
+魔术方法（Magic Methods），也称为双下划线方法（Dunder Methods），是特殊的方法名，Python提供了许多魔术方法，使得类能够与Python的内置操作（如对象创建、字符串表示、算术运算等）进行交互。
+
+#### 4.4.1 `__init__` 方法
+
+`__init__`方法是类的构造函数，用于初始化对象。在创建对象时，Python会自动调用这个方法。
+
+**示例**:
+
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(3, 4)
+print(p.x, p.y)  # 输出: 3 4
+```
+
+在这个示例中，`__init__`方法在`Point`对象创建时被自动调用，初始化了`x`和`y`两个属性。
+
+#### 4.4.2 `__str__` 方法
+
+`__str__`方法用于定义对象的字符串表示形式。当`print()`函数或`str()`函数调用对象时，Python会自动调用这个方法。
+
+**示例**:
+
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return f"Point({self.x}, {self.y})"
+
+p = Point(3, 4)
+print(p)  # 输出: Point(3, 4)
+```
+
+在这个示例中，`__str__`方法定义了`Point`对象的字符串表示形式。当我们使用`print(p)`时，Python会调用`__str__`方法，输出`Point(3, 4)`。
+
+#### 4.4.3 其他常用魔术方法
+
+除了`__init__`和`__str__`，Python还有许多其他的魔术方法，可以让类与Python的内置操作无缝集成。以下是一些常用的魔术方法：
+
+- `__repr__(self)`: 返回对象的官方字符串表示，通常用于调试。与`__str__`不同，`__repr__`应该返回一个“代码可重现”的字符串。
+- `__len__(self)`: 定义对象的长度。通常与`len()`函数一起使用。
+- `__eq__(self, other)`: 定义对象的相等性判断，通常用于`==`操作符。
+- `__lt__(self, other)`: 定义对象的“小于”判断，通常用于`<`操作符。
+- `__add__(self, other)`: 定义对象的加法行为，通常用于`+`操作符。
+
+**示例**:
+
+```python
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def __str__(self):
+        return f"Rectangle({self.width}, {self.height})"
+
+    def __repr__(self):
+        return f"Rectangle({self.width}, {self.height})"
+
+    def __len__(self):
+        return self.width * self.height
+
+    def __eq__(self, other):
+        return self.width == other.width and self.height == other.height
+
+    def __lt__(self, other):
+        return self.width * self.height < other.width * other.height
+
+    def __add__(self, other):
+        return Rectangle(self.width + other.width, self.height + other.height)
+```
+
+在这个示例中，我们定义了一个`Rectangle`类，并实现了多个魔术方法：
+
+- `__str__`和`__repr__`方法返回矩形的字符串表示。
+- `__len__`方法返回矩形的面积。
+- `__eq__`方法比较两个矩形是否相等（宽度和高度都相等）。
+- `__lt__`方法比较两个矩形的面积。
+- `__add__`方法将两个矩形的宽度和高度相加，返回一个新的矩形。
+
+**示例用法**:
+
+```python
+rect1 = Rectangle(3, 4)
+rect2 = Rectangle(5, 6)
+rect3 = Rectangle(3, 4)
+
+print(rect1)  # 输出: Rectangle(3, 4)
+print(repr(rect2))  # 输出: Rectangle(5, 6)
+print(len(rect1))  # 输出: 12
+print(rect1 == rect3)  # 输出: True
+print(rect1 < rect2)  # 输出: True
+rect4 = rect1 + rect2
+print(rect4)  # 输出: Rectangle(8, 10)
+```
+
+在这个例子中，我们展示了如何使用不同的魔术方法来进行字符串表示、比较、相加等操作。
+
+### 4.5 项目实例-银行管理系统
+
+在这一节中，我们将展示一个完整的类编程项目，旨在展示面向对象编程（OOP）的各种特性和优点。通过这个项目展示如何定义类、创建对象、使用类的方法和属性，以及如何利用OOP的优势编写高效且易于维护的代码。
+
+#### 项目描述
+
+我们将构建一个模拟银行账户管理系统，系统具备以下功能：
+
+- **创建账户**：用户可以创建新的银行账户，账户包括所有者姓名、唯一账号、初始余额等属性。
+- **存款与取款**：用户可以向账户存入或从账户中取出金额。
+- **查看余额**：用户可以查询账户的当前余额。
+- **交易历史**：系统记录所有的存款和取款操作。
+- **转账功能**：用户可以将资金从一个账户转移到另一个账户。
+- **计算利息**：系统根据设定的利率计算账户利息并将其添加到余额中。
+
+#### 代码实现
+
+```python
+class BankAccount:
+    account_number_counter = 1000  # 类属性，自动生成唯一账号
+    
+    def __init__(self, owner, balance=0.0):
+        """
+        初始化方法，用于创建一个新的银行账户。
+        
+        参数:
+        owner (str): 账户所有者的姓名。
+        balance (float): 账户的初始余额，默认为0。
+        """
+        self.owner = owner  # 账户所有者
+        self.balance = balance  # 账户余额
+        self.account_number = BankAccount.account_number_counter  # 账户唯一账号
+        BankAccount.account_number_counter += 1  # 每创建一个账户，账号计数器增加1
+        self.transaction_history = []  # 用于存储账户的交易历史
+    
+    def deposit(self, amount):
+        """
+        存款方法，增加账户余额。
+        
+        参数:
+        amount (float): 要存入的金额，必须为正数。
+        """
+        if amount > 0:
+            self.balance += amount
+            self.transaction_history.append(f"Deposited: ${amount}")
+            print(f"${amount} deposited successfully.")
+        else:
+            print("Invalid deposit amount. Amount must be positive.")
+    
+    def withdraw(self, amount):
+        """
+        取款方法，减少账户余额。
+        
+        参数:
+        amount (float): 要取出的金额，必须为正数且不超过当前余额。
+        """
+        if 0 < amount <= self.balance:
+            self.balance -= amount
+            self.transaction_history.append(f"Withdrew: ${amount}")
+            print(f"${amount} withdrawn successfully.")
+        else:
+            print("Invalid withdraw amount or insufficient balance.")
+    
+    def get_balance(self):
+        """
+        获取当前账户余额的方法。
+        
+        返回:
+        float: 当前账户余额。
+        """
+        print(f"Current balance: ${self.balance}")
+        return self.balance
+    
+    def account_details(self):
+        """
+        显示账户详细信息的方法，包括账号、所有者、余额和交易历史。
+        
+        返回:
+        str: 账户的详细信息字符串。
+        """
+        details = f"Account Number: {self.account_number}\n" \
+                  f"Owner: {self.owner}\n" \
+                  f"Balance: ${self.balance}\n" \
+                  f"Transaction History: {self.transaction_history}"
+        print(details)
+        return details
+    
+    def transfer(self, target_account, amount):
+        """
+        转账方法，将资金从当前账户转移到目标账户。
+        
+        参数:
+        target_account (BankAccount): 目标账户对象。
+        amount (float): 要转移的金额，必须为正数且不超过当前余额。
+        """
+        if 0 < amount <= self.balance:
+            self.withdraw(amount)
+            target_account.deposit(amount)
+            print(f"Transferred ${amount} to account {target_account.account_number}.")
+        else:
+            print("Transfer failed. Invalid amount or insufficient balance.")
+    
+    def apply_interest(self, rate):
+        """
+        计算并应用利息的方法，利息会被添加到账户余额中。
+        
+        参数:
+        rate (float): 利率，例如0.05表示5%。
+        """
+        if rate > 0:
+            interest = self.balance * rate
+            self.deposit(interest)
+            print(f"Interest of ${interest:.2f} applied at rate {rate*100}%.")
+        else:
+            print("Invalid interest rate. Rate must be positive.")
+    
+    def __str__(self):
+        """
+        魔术方法__str__，返回账户的可读字符串表示。
+        
+        返回:
+        str: 账户的字符串表示形式。
+        """
+        return f"BankAccount(owner={self.owner}, balance=${self.balance})"
+```
+
+#### 示例用法
+
+```python
+# 创建两个账户
+account1 = BankAccount("Alice", 1000)
+account2 = BankAccount("Bob", 500)
+
+# 存款操作
+account1.deposit(200)  # 输出: $200 deposited successfully.
+account2.deposit(300)  # 输出: $300 deposited successfully.
+
+# 取款操作
+account1.withdraw(150)  # 输出: $150 withdrawn successfully.
+account2.withdraw(1000)  # 输出: Invalid withdraw amount or insufficient balance.
+
+# 查看余额
+account1.get_balance()  # 输出: Current balance: $1050
+account2.get_balance()  # 输出: Current balance: $800
+
+# 查看账户详情
+account1.account_details()
+# 输出:
+# Account Number: 1000
+# Owner: Alice
+# Balance: $1050
+# Transaction History: ['Deposited: $200', 'Withdrew: $150']
+
+# 转账操作
+account1.transfer(account2, 250)  # 输出: Transferred $250 to account 1001.
+
+# 查看转账后的余额
+account1.get_balance()  # 输出: Current balance: $800
+account2.get_balance()  # 输出: Current balance: $1050
+
+# 应用利息
+account2.apply_interest(0.05)  # 输出: Interest of $52.50 applied at rate 5%.
+
+# 查看利息后的账户详情
+account2.account_details()
+# 输出:
+# Account Number: 1001
+# Owner: Bob
+# Balance: $1102.50
+# Transaction History: ['Deposited: $300', 'Transferred: $250', 'Interest Applied: $52.50']
+
+# 查看账户字符串表示
+print(account1)  # 输出: BankAccount(owner=Alice, balance=$800)
+print(account2)  # 输出: BankAccount(owner=Bob, balance=$1102.50)
+```
+
+### 4.6 习题
+
+#### 1. 动物分类管理系统
+
+**描述**:
+创建一个动物分类管理系统，要求用户能够创建不同类型的动物（例如，猫、狗、鸟），并能够查看这些动物的详细信息，如种类、年龄、叫声等。
+
+**要求**:
+1. 定义一个 `Animal` 基类，包含公共属性和方法，如名字、年龄、叫声等。
+2. 创建 `Cat`、`Dog` 和 `Bird` 等子类，继承 `Animal` 类，并在每个子类中定义特定的叫声方法。
+3. 实例化几个动物对象，调用各自的叫声方法，并输出每个动物的详细信息。
+4. 确保使用继承、方法重写和类的实例化。
+
+#### 2. 图书管理系统
+
+**描述**:
+开发一个简单的图书管理系统，用户可以创建图书、管理借阅情况，并能查看图书的状态（是否已借出、借出者信息）。
+
+**要求**:
+1. 定义一个 `Book` 类，包含属性如书名、作者、借阅状态等。
+2. 定义方法来借出书籍和归还书籍。借出书籍时记录借阅者的姓名。
+3. 创建一个 `Library` 类，包含一个用于管理多本书籍的列表，并包含方法来添加和删除书籍、查看所有图书状态。
+4. 确保使用类的属性和方法、对象的列表管理、以及封装与私有属性。
+
+#### 3. 简易银行账户系统升级版
+
+**描述**:
+在先前银行账户管理系统的基础上，添加新的功能：用户可以创建不同类型的账户（如储蓄账户、支票账户），并能对这些账户进行不同的操作，如计算不同类型账户的利息。
+
+**要求**:
+1. 定义一个 `Account` 基类，并在其基础上创建 `SavingsAccount` 和 `CheckingAccount` 子类。
+2. 在 `SavingsAccount` 中，重写计算利息方法来计算更高的利息；在 `CheckingAccount` 中，添加一个转账收取0.1%手续费功能。
+3. 实例化不同类型的账户对象，演示存款、取款、转账以及利息计算等操作。
+4. 确保使用继承、多态、类的魔术方法及封装。
+
+#### 4. 人事管理系统
+
+**描述**:
+设计一个人事管理系统，管理公司员工的基本信息、职位以及薪资，并能计算年度奖金。
+
+**要求**:
+1. 定义一个 `Employee` 类，包含员工的姓名、职位和基本薪资等属性。
+2. 定义一个 `Manager` 子类，继承 `Employee` 类，增加一个方法来计算年度奖金，奖金为基本薪资的10%。
+3. 创建一个 `HR` 类，用于管理多个员工的信息，添加方法来增加、删除员工，并输出所有员工的详细信息。
+4. 实例化多个 `Employee` 和 `Manager` 对象，展示员工管理和奖金计算功能。
+5. 确保使用继承、多态、封装和类的属性与方法。 
+
+---
 
 ## 5. 文件操作
    - **读写文件**
