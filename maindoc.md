@@ -1561,18 +1561,409 @@ print(account2)  # 输出: BankAccount(owner=Bob, balance=$1102.50)
 ---
 
 ## 5. 文件操作
-   - **读写文件**
-     - 打开文件
-     - 读写操作
-     - 文件关闭与上下文管理
-   - **处理文本文件**
-   - **文件与目录操作**
+
+文件操作是编程中非常常见的需求，涉及到对文件的读取、写入、管理和处理。Python 提供了强大的内置函数和模块，使这些操作变得非常简单。
+
+### 5.1 读写文件
+
+#### 5.1.1 打开文件
+
+在对文件进行读写之前，首先需要打开文件。Python 使用 `open()` 函数来打开文件，该函数的通用格式如下：
+
+```python
+file = open('filename', 'mode')
+```
+
+- `filename`: 要打开的文件名，包含路径（如果文件不在当前目录）。
+- `mode`: 文件打开模式，常见的有：
+  - `'r'`: 只读模式（默认模式），如果文件不存在会抛出错误。
+  - `'w'`: 写入模式，若文件存在会清空内容，若文件不存在会创建新文件。
+  - `'a'`: 追加模式，将内容添加到文件末尾。
+  - `'b'`: 二进制模式，与其他模式结合使用，如 `'rb'`、`'wb'`。
+
+**示例**:
+```python
+# 以只读模式打开文件
+file = open('example.txt', 'r')
+
+# 以写入模式打开文件，如果文件不存在会创建文件
+file = open('example.txt', 'w')
+
+# 以二进制读模式打开文件，适合处理图片、音频等非文本文件
+file = open('example.png', 'rb')
+```
+
+#### 5.1.2 读写操作
+
+打开文件后，可以使用不同的方法来读取或写入文件内容。常见的文件操作方法有：
+
+- `read(size=-1)`: 读取文件的全部内容，`size` 参数可指定读取的字符数，默认读取到文件末尾。
+- `readline()`: 逐行读取文件，每次返回一行内容。
+- `readlines()`: 读取文件的所有行，返回一个包含每行内容的列表。
+- `write(string)`: 将字符串写入文件，不会自动添加换行符。
+- `writelines(list_of_strings)`: 将一个字符串列表写入文件，不会自动添加换行符。
+
+**示例**:
+```python
+# 读取文件的所有内容
+file = open('example.txt', 'r')
+content = file.read()  # content 现在包含整个文件的内容
+print(content)
+file.close()  # 关闭文件
+
+# 逐行读取文件内容
+file = open('example.txt', 'r')
+for line in file:
+    print(line.strip())  # strip() 去除行末的换行符和空白
+file.close()
+
+# 写入文件
+file = open('example.txt', 'w')
+file.write('Hello, World!\n')  # 写入字符串并换行
+file.write('Another line.\n')  # 写入另一行
+file.close()
+
+# 追加内容到文件末尾
+file = open('example.txt', 'a')
+file.write('Appending this line.\n')
+file.close()
+
+# 使用 writelines 写入多行内容
+lines = ['First line.\n', 'Second line.\n', 'Third line.\n']
+file = open('example.txt', 'w')
+file.writelines(lines)
+file.close()
+```
+
+#### 5.1.3 文件关闭与上下文管理
+
+文件操作完成后，必须关闭文件以释放系统资源。虽然可以手动使用 `close()` 方法关闭文件，但 Python 提供了上下文管理功能（`with` 语句），可以自动管理文件的打开和关闭。这不仅简化了代码，还避免了忘记关闭文件的错误。
+
+**示例**:
+```python
+# 使用上下文管理器自动关闭文件
+with open('example.txt', 'r') as file:
+    content = file.read()  # 在这里进行文件操作
+    print(content)
+# 不需要显式调用 close() 方法，文件会在 with 语句块结束时自动关闭
+
+# 上下文管理可以处理文件写入
+with open('example.txt', 'w') as file:
+    file.write('Hello, World!\n')
+    file.write('File will be closed automatically.')
+# 文件已经被关闭，即使发生错误也会关闭文件
+```
+
+### 5.2 处理文本文件
+
+处理文本文件时，可以结合字符串操作方法来对文件内容进行更复杂的处理，如查找、替换、分割等。这里介绍几种常见的操作和技巧：
+
+**示例**:
+```python
+# 读取文件并逐行处理
+with open('example.txt', 'r') as file:
+    for line in file:
+        line = line.strip()  # 去除行首尾的空白字符和换行符
+        if 'keyword' in line:
+            print(f'Found the keyword in: {line}')
+
+# 将文件内容读入列表并逐行处理
+with open('example.txt', 'r') as file:
+    lines = file.readlines()  # 将文件所有行读取为列表
+    lines = [line.upper() for line in lines]  # 将每行内容转换为大写
+    print(lines)
+
+# 替换文件中的特定字符串
+with open('example.txt', 'r') as file:
+    content = file.read()
+
+content = content.replace('old_string', 'new_string')
+
+with open('example.txt', 'w') as file:
+    file.write(content)
+```
+
+### 5.3 文件与目录操作
+
+Python 的 `os` 和 `shutil` 模块提供了丰富的功能来进行文件与目录的操作。你可以创建、删除、移动文件和目录，也可以列出目录内容。
+
+#### 5.3.1 文件操作
+
+一些常用的文件操作方法包括：
+
+- `os.rename(old_name, new_name)`: 重命名文件。
+- `os.remove(filename)`: 删除文件。
+- `shutil.copy(src, dst)`: 复制文件到目标路径。
+- `shutil.move(src, dst)`: 移动文件到目标路径。
+
+**示例**:
+```python
+import os
+import shutil
+
+# 重命名文件
+os.rename('old_name.txt', 'new_name.txt')
+
+# 复制文件
+shutil.copy('source.txt', 'destination.txt')
+
+# 删除文件
+os.remove('new_name.txt')  # 注意：删除是永久性的，请小心操作
+
+# 移动文件到新目录
+shutil.move('source.txt', '/path/to/destination/')
+```
+
+#### 5.3.2 目录操作
+
+目录操作包括创建、删除和列出目录内容等：
+
+- `os.mkdir(directory_name)`: 创建新目录。
+- `os.rmdir(directory_name)`: 删除空目录。
+- `os.listdir(directory_path)`: 列出目录中的所有文件和子目录。
+- `shutil.rmtree(directory_path)`: 递归删除目录及其所有内容。
+
+**示例**:
+```python
+import os
+import shutil
+
+# 创建新目录
+os.mkdir('new_folder')
+
+# 列出当前目录内容
+print(os.listdir('.'))  # 输出当前工作目录的文件和文件夹列表
+
+# 删除空目录
+os.rmdir('new_folder')
+
+# 创建多级目录
+os.makedirs('parent_folder/child_folder')
+
+# 递归删除目录及其内容
+shutil.rmtree('parent_folder')
+```
+
+### 5.4 习题
+
+#### 1. 日志文件清理工具
+
+**描述**:
+你的公司有一个每天生成的日志文件目录，文件名包含生成日期（如 `log_20240831.txt`）。你需要编写一个程序，自动清理超过30天的旧日志文件，确保目录中只保留最近的日志。
+
+**要求**:
+1. 读取指定目录中的所有日志文件。
+2. 判断日志文件的生成日期，并删除超过30天的文件。
+3. 操作完成后，输出删除的文件列表。
+
+#### 2. 备份工具
+
+**描述**:
+编写一个备份工具，将某个文件夹中的所有 `.txt` 文件复制到指定的备份目录中，并为每个文件名加上时间戳。例如，`document.txt` 备份后文件名为 `document_20240831.txt`。
+
+**要求**:
+1. 遍历指定目录中的所有 `.txt` 文件。
+2. 在备份目录中复制文件，并在文件名中添加当前日期的时间戳。
+3. 操作完成后，输出所有备份文件的路径。
+
+#### 3. 统计单词频率
+
+**描述**:
+你有一份包含大量文本的文件，要求你编写程序统计文件中每个单词出现的频率，并将结果按频率从高到低的顺序写入一个新的文件中。
+
+**要求**:
+1. 读取并处理文件中的所有文本，统计每个单词出现的频率。
+2. 将统计结果按频率从高到低排序，并写入新的文本文件中，格式为 `单词: 频率`。
+3. 使用上下文管理器确保文件被正确关闭。
+
+#### 4. 文件分类整理
+
+**描述**:
+你需要编写一个程序，将某个目录下的文件按类型分类，并移动到不同的文件夹中。例如，将所有图片文件 (`.jpg`, `.png`) 移动到 `images` 文件夹，将所有文档文件 (`.txt`, `.pdf`) 移动到 `documents` 文件夹。
+
+**要求**:
+1. 根据文件扩展名识别文件类型（如图片、文档、音频等）。
+2. 创建对应的分类文件夹，并将文件移动到相应的文件夹中。
+3. 若分类文件夹已存在，则直接移动文件；若文件夹不存在，则先创建再移动。
+
+#### 5. 批量替换文本
+
+**描述**:
+你的公司有一批模板文件，文件内容中包含占位符（如 `{name}` 和 `{date}`）。你需要编写一个程序，批量替换这些占位符，并生成新的文件。
+
+**要求**:
+1. 编写程序读取模板文件，将 `{name}` 替换为指定的名字，将 `{date}` 替换为当前日期。
+2. 将替换后的内容写入新的文件中，文件名为原文件名加上时间戳。
+3. 输出所有生成的新文件路径。
 
 ## 6. 异常处理
-   - **什么是异常**
-   - **try-except 结构**
-   - **finally 语句**
-   - **自定义异常**
+
+在编写 Python 程序时，难免会遇到各种异常情况，如文件找不到、输入无效或除以零等。为确保程序在出现错误时能够优雅地应对而非崩溃，我们需要学会异常处理。异常处理不仅可以提高程序的鲁棒性，还可以增强用户体验。
+
+### 6.1 什么是异常
+
+**异常** 是程序运行过程中发生的错误，通常会导致程序的执行被中断。例如，当你尝试访问一个不存在的文件时，Python 会抛出一个 `FileNotFoundError` 异常，通知你程序中发生了问题。
+
+常见的异常类型包括：
+- `SyntaxError`: 语法错误，如缺少冒号或括号不匹配。
+- `TypeError`: 类型错误，比如尝试将一个字符串与整数相加。
+- `IndexError`: 索引超出范围，如访问列表中不存在的元素。
+- `KeyError`: 字典中不存在指定的键。
+- `ValueError`: 值错误，如将无法转换为数字的字符串转换为整数。
+- `FileNotFoundError`: 文件未找到。
+- `ZeroDivisionError`: 尝试除以零。
+
+### 6.2 try-except 结构
+
+Python 提供了 `try-except` 结构，用于捕获并处理异常，避免程序因错误而直接崩溃。
+
+**基本格式**:
+```python
+try:
+    # 可能发生异常的代码块
+except 异常类型 as 异常变量:
+    # 如果发生了指定类型的异常，执行该代码块
+```
+
+**详细解释**:
+- `try` 块中的代码是可能引发异常的代码。在这里执行你希望尝试的操作。
+- `except` 块用来捕获异常，并执行相应的处理。如果发生了指定的异常类型，就会执行 `except` 块中的代码。如果不指定异常类型，则会捕获所有异常。
+- `as` 后面的 `异常变量` 用于获取异常的详细信息。
+
+**示例**:
+
+```python
+try:
+    # 尝试除以零，预期会引发 ZeroDivisionError
+    result = 10 / 0
+except ZeroDivisionError as e:
+    # 捕获异常并处理
+    print(f"捕获到错误: {e}")
+    # 输出: 捕获到错误: division by zero
+```
+
+**进一步扩展**:
+- 你可以使用多个 `except` 块来处理不同类型的异常。
+- 你还可以在 `except` 中继续抛出异常或记录日志。
+
+```python
+try:
+    # 尝试访问不存在的文件
+    with open('non_existent_file.txt', 'r') as file:
+        content = file.read()
+except FileNotFoundError as e:
+    print(f"错误: {e}")
+    # 可以记录错误日志
+    # log_error(e)
+except ZeroDivisionError as e:
+    print(f"数学错误: {e}")
+except Exception as e:
+    # 捕获所有其他类型的异常
+    print(f"其他错误: {e}")
+```
+
+### 6.3 finally 语句
+
+`finally` 语句用于定义一段代码，无论是否发生异常，都会执行这段代码。通常用于资源的清理操作，如关闭文件或释放资源。
+
+**基本格式**:
+```python
+try:
+    # 可能发生异常的代码块
+except 异常类型 as 异常变量:
+    # 异常处理代码块
+finally:
+    # 始终会执行的代码块，无论是否发生异常
+```
+
+**示例**:
+
+```python
+try:
+    # 打开一个可能不存在的文件
+    file = open("test.txt", "r")
+    content = file.read()
+except FileNotFoundError as e:
+    print(f"错误: {e}")
+finally:
+    # 确保文件被关闭，无论是否发生异常
+    file.close()
+    print("文件已关闭")
+```
+
+**进一步扩展**:
+- `finally` 块通常用于确保资源被正确释放，即使在 `try` 块中出现异常也是如此。
+- 可以在 `finally` 块中执行一些清理操作，例如关闭数据库连接或删除临时文件。
+
+### 6.4 自定义异常
+
+当内置的异常类型不足以表达特定错误时，可以定义自定义异常。自定义异常通常是从 `Exception` 类派生的子类，允许你为特定错误情境创建更具描述性的异常类型。
+
+**基本格式**:
+```python
+class CustomError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+# 在某个代码块中使用自定义异常
+try:
+    # 如果某个条件满足，就抛出自定义异常
+    raise CustomError("这是一个自定义错误")
+except CustomError as e:
+    print(f"捕获到自定义异常: {e.message}")
+```
+
+**示例**:
+
+```python
+class NegativeNumberError(Exception):
+    """自定义异常类，用于处理负数输入的情况"""
+    def __init__(self, value):
+        self.value = value
+        super().__init__(f"无法计算负数 {value} 的平方根")
+
+def square_root(x):
+    if x < 0:
+        # 如果输入为负数，抛出自定义异常
+        raise NegativeNumberError(x)
+    return x ** 0.5
+
+try:
+    result = square_root(-9)
+except NegativeNumberError as e:
+    print(f"错误: {e}")
+    # 输出: 错误: 无法计算负数 -9 的平方根
+```
+
+**进一步扩展**:
+- 自定义异常可以携带更多上下文信息，如错误代码或错误级别。
+- 可以定义多个自定义异常类，处理不同的错误场景。
+
+```python
+class InvalidInputError(Exception):
+    """自定义异常，用于处理无效输入"""
+    pass
+
+class CalculationError(Exception):
+    """自定义异常，用于处理计算错误"""
+    pass
+
+def calculate(value):
+    if not isinstance(value, (int, float)):
+        raise InvalidInputError(f"无效输入: {value}")
+    if value == 0:
+        raise CalculationError("无法除以零")
+    return 10 / value
+
+try:
+    result = calculate(0)
+    print(f"计算结果: {result}")
+except InvalidInputError as e:
+    print(f"输入错误: {e}")
+except CalculationError as e:
+    print(f"计算错误: {e}")
+```
 
 ## 7. 常用数据结构
    - **列表、元组与集合**
