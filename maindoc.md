@@ -1965,11 +1965,570 @@ except CalculationError as e:
     print(f"计算错误: {e}")
 ```
 
+### 6.5 习题
+
+#### 1. 方程求解与输入检查
+
+**描述**:
+编写一个函数，求解一元一次方程 ax + b = 0。用户输入系数 a 和 b，程序计算并输出 x 的值。程序需要处理输入不为数字的异常情况，并要求 a 不能为零。
+
+**要求**:
+1. 使用 `try-except` 结构处理 `ValueError` 异常，以确保输入的 a 和 b 为有效数字。
+2. 使用自定义异常处理 a 为零的情况，并提示用户输入有效的 a 值。
+3. 函数应返回方程的解或抛出自定义异常。
+
+
+#### 2. 日历事件提醒
+
+**描述**:
+编写一个程序，允许用户输入多个事件及其日期，并在事件日期到来时发出提醒。程序需要处理日期格式错误和输入重复事件的情况。
+
+**要求**:
+1. 使用 `try-except` 结构处理用户输入的 `ValueError` 异常，确保日期格式正确。
+2. 使用自定义异常处理重复事件的输入，并提示用户。
+3. 使用 `finally` 语句在程序结束时输出所有有效的事件列表。
+
+#### 3. 预算追踪器
+
+**描述**:
+编写一个预算追踪程序，允许用户输入每月的收入和支出。程序将计算用户的净收入，并在预算超支时发出警告。程序需要处理输入错误和预算超支的情况。
+
+**要求**:
+1. 使用 `try-except` 结构处理收入和支出的 `ValueError` 异常。
+2. 使用自定义异常处理预算超支情况，并在用户输入完成后给出警告。
+3. 使用 `finally` 语句在计算结束后输出用户的净收入和预算状态。
+
+
+
 ## 7. 常用数据结构
-   - **列表、元组与集合**
-   - **字典**
-   - **队列与栈**
-   - **理解可变与不可变类型**
+
+在编程中，数据结构是用于组织和存储数据的一种方式，以便能够高效地访问和操作数据。Python 提供了一些常用的数据结构，如列表、元组、集合和字典。理解这些数据结构及其操作对于编写高效的代码至关重要。
+
+### 7.1 列表、元组与集合
+
+#### 7.1.1 列表 (List)
+
+**列表** 是一种可变的有序数据结构，用于存储一系列元素。列表中的元素可以是任意类型，并且可以包含重复的元素。
+
+**通用格式**:
+```python
+my_list = [element1, element2, element3]
+```
+
+**详细示例**:
+```python
+# 创建一个列表
+fruits = ["apple", "banana", "cherry"]
+
+# 向列表中添加一个新元素
+fruits.append("orange")
+print(fruits)  # 输出: ['apple', 'banana', 'cherry', 'orange']
+
+# 访问列表中的元素
+first_fruit = fruits[0]
+print(first_fruit)  # 输出: apple
+
+# 修改列表中的元素
+fruits[1] = "blueberry"
+print(fruits)  # 输出: ['apple', 'blueberry', 'cherry', 'orange']
+
+# 删除列表中的元素
+fruits.remove("cherry")
+print(fruits)  # 输出: ['apple', 'blueberry', 'orange']
+
+# 使用切片操作获取子列表
+sub_list = fruits[1:3]
+print(sub_list)  # 输出: ['blueberry', 'orange']
+
+# 列表拼接
+more_fruits = ["grape", "pineapple"]
+all_fruits = fruits + more_fruits
+print(all_fruits)  # 输出: ['apple', 'blueberry', 'orange', 'grape', 'pineapple']
+
+# 列表反转
+fruits.reverse()
+print(fruits)  # 输出: ['orange', 'blueberry', 'apple']
+
+# 列表排序
+fruits.sort()
+print(fruits)  # 输出: ['apple', 'blueberry', 'orange']
+```
+
+**特点**:
+- **可变性**: 列表中的元素可以被修改、添加或删除。
+- **有序性**: 列表保持元素的插入顺序，可以通过索引访问元素。
+- **动态大小**: 列表的大小可以根据需要动态增加或减少。
+
+#### 7.1.2 元组 (Tuple)
+
+**元组** 是一种不可变的有序数据结构。元组中的元素一旦创建就不能被修改，因此元组通常用于存储不可改变的数据。
+
+**通用格式**:
+```python
+my_tuple = (element1, element2, element3)
+```
+
+**详细示例**:
+```python
+# 创建一个元组
+coordinates = (10.0, 20.0)
+
+# 访问元组中的元素
+x = coordinates[0]
+y = coordinates[1]
+print(f"X: {x}, Y: {y}")  # 输出: X: 10.0, Y: 20.0
+
+# 尝试修改元组中的元素会引发错误
+# coordinates[0] = 15.0  # 会抛出错误：TypeError: 'tuple' object does not support item assignment
+
+# 元组可以与列表、字典等数据结构一起使用
+locations = {"point1": coordinates, "point2": (30.0, 40.0)}
+print(locations)  # 输出: {'point1': (10.0, 20.0), 'point2': (30.0, 40.0)}
+
+# 元组解包
+a, b = coordinates
+print(f"a: {a}, b: {b}")  # 输出: a: 10.0, b: 20.0
+```
+
+**特点**:
+- **不可变性**: 元组中的元素不能被修改。
+- **有序性**: 元组保持元素的插入顺序。
+- **轻量级**: 因为不可变，元组比列表更节省内存。
+
+#### 7.1.3 集合 (Set)
+
+**集合** 是一种无序的、可变的数据结构，用于存储不重复的元素。集合中的元素必须是不可变的，因此集合不能包含列表或字典。
+
+**通用格式**:
+```python
+my_set = {element1, element2, element3}
+```
+
+**详细示例**:
+```python
+# 创建一个集合
+unique_numbers = {1, 2, 3, 3, 4}  # 重复的元素会被自动移除
+print(unique_numbers)  # 输出: {1, 2, 3, 4}
+
+# 向集合中添加元素
+unique_numbers.add(5)
+print(unique_numbers)  # 输出: {1, 2, 3, 4, 5}
+
+# 删除集合中的元素
+unique_numbers.remove(2)
+print(unique_numbers)  # 输出: {1, 3, 4, 5}
+
+# 检查元素是否在集合中
+is_in_set = 3 in unique_numbers
+print(is_in_set)  # 输出: True
+
+# 集合的数学操作：并集、交集、差集
+other_numbers = {3, 4, 5, 6}
+union_set = unique_numbers.union(other_numbers)
+print(union_set)  # 输出: {1, 3, 4, 5, 6}
+
+intersection_set = unique_numbers.intersection(other_numbers)
+print(intersection_set)  # 输出: {3, 4, 5}
+
+difference_set = unique_numbers.difference(other_numbers)
+print(difference_set)  # 输出: {1}
+```
+
+**特点**:
+- **无序性**: 集合中的元素没有固定顺序。
+- **不重复性**: 集合中的元素是唯一的。
+- **高效性**: 集合对于成员资格测试（检查元素是否在集合中）非常高效。
+
+### 7.2 字典 (Dictionary)
+
+**字典** 是一种可变的无序数据结构，用于存储键值对（key-value pairs）。每个键是唯一的，键必须是不可变类型（如字符串、数字或元组），而值可以是任意类型。
+
+**通用格式**:
+```python
+my_dict = {key1: value1, key2: value2, key3: value3}
+```
+
+**详细示例**:
+```python
+# 创建一个字典
+student_scores = {"Alice": 85, "Bob": 90, "Charlie": 78}
+
+# 访问字典中的值
+bob_score = student_scores["Bob"]
+print(f"Bob's score: {bob_score}")  # 输出: Bob's score: 90
+
+# 修改字典中的值
+student_scores["Alice"] = 88
+print(student_scores)  # 输出: {'Alice': 88, 'Bob': 90, 'Charlie': 78}
+
+# 添加新键值对
+student_scores["David"] = 92
+print(student_scores)  # 输出: {'Alice': 88, 'Bob': 90, 'Charlie': 78, 'David': 92}
+
+# 删除键值对
+del student_scores["Charlie"]
+print(student_scores)  # 输出: {'Alice': 88, 'Bob': 90, 'David': 92}
+
+# 遍历字典中的键和值
+for name, score in student_scores.items():
+    print(f"{name}: {score}")
+
+# 使用 get 方法提供默认值
+eve_score = student_scores.get("Eve", 0)
+print(f"Eve's score: {eve_score}")  # 输出: Eve's score: 0
+
+# 字典键的常用操作：keys(), values(), items()
+keys = student_scores.keys()
+print(keys)  # 输出: dict_keys(['Alice', 'Bob', 'David'])
+
+values = student_scores.values()
+print(values)  # 输出: dict_values([88, 90, 92])
+```
+
+**特点**:
+- **键值对存储**: 通过键访问相应的值，键是唯一的。
+- **无序性**: 在较早的 Python 版本中，字典的键值对无序存储。Python 3.6 及更高版本中，字典保持插入顺序。
+- **动态性**: 可以随时添加、修改或删除键值对。
+
+### 7.3 队列与栈
+
+在编程中，**队列** 和 **栈** 是两种常见的数据结构，它们在处理数据的顺序和方式上有着显著的区别。理解它们的用途和区别对于选择合适的数据结构来解决实际问题至关重要。
+
+#### 7.3.1 队列 (Queue)
+
+**队列** 是一种先进先出（FIFO, First-In-First-Out）的数据结构。它的工作方式就像排队的队伍，最先进入队列的人（或元素）最先被处理。
+
+**用途**:
+- **任务调度**: 队列通常用于任务调度系统中，保证最先到达的任务最先被处理。
+- **广度优先搜索 (BFS)**: 在图的遍历中，队列用于存储尚未访问的节点，以确保按照层次顺序访问节点。
+- **缓冲区管理**: 队列常用于数据缓冲区中，处理来自数据流（如网络数据包）的一系列任务。
+
+**通用格式**:
+```python
+from collections import deque
+
+queue = deque([element1, element2, element3])
+```
+
+**详细示例**:
+```python
+from collections import deque
+
+# 创建一个队列
+queue = deque(["task1", "task2", "task3"])
+
+# 向队列中添加新任务（入队）
+queue.append("task4")
+print("队列状态:", queue)  # 输出: deque(['task1', 'task2', 'task3', 'task4'])
+
+# 从队列中取出任务（出队）
+next_task = queue.popleft()
+print(f"处理任务: {next_task}")  # 输出: 处理任务: task1
+print("队列状态:", queue)  # 输出: deque(['task2', 'task3', 'task4'])
+
+# 检查队列是否为空
+is_empty = len(queue) == 0
+print(f"队列是否为空? {is_empty}")  # 输出: 队列是否为空? False
+```
+
+#### 7.3.2 栈 (Stack)
+
+**栈** 是一种后进先出（LIFO, Last-In-First-Out）的数据结构。它的工作方式类似于书堆，最后放上去的书最先被拿出来。
+
+**用途**:
+- **递归**: 栈用于处理递归函数的调用，因为每次调用的函数都需要先完成其内部任务，然后才能回到上一级调用。
+- **撤销操作**: 栈用于实现撤销功能，例如在文本编辑器中，每次操作都会被压入栈中，当用户按下撤销按钮时，最近的操作就会被弹出并撤销。
+- **深度优先搜索 (DFS)**: 在图的遍历中，栈用于存储尚未访问的节点，以确保深度优先地访问节点。
+
+**通用格式**:
+```python
+stack = [element1, element2, element3]
+```
+
+**详细示例**:
+```python
+# 创建一个栈
+stack = ["page1", "page2", "page3"]
+
+# 向栈中添加新页面（压栈）
+stack.append("page4")
+print("栈状态:", stack)  # 输出: ['page1', 'page2', 'page3', 'page4']
+
+# 从栈中移除最近访问的页面（弹栈）
+last_page = stack.pop()
+print(f"返回到页面: {last_page}")  # 输出: 返回到页面: page4
+print("栈状态:", stack)  # 输出: ['page1', 'page2', 'page3']
+
+# 检查栈是否为空
+is_empty = len(stack) == 0
+print(f"栈是否为空? {is_empty}")  # 输出: 栈是否为空? False
+```
+
+### 7.4 理解可变与不可变类型——学生管理系统
+
+在 Python 中，数据类型分为 **可变类型（Mutable）** 和 **不可变类型（Immutable）**。理解这两种类型的区别对于编写高效、可靠的代码至关重要。本节将通过一个简单的学生管理系统详细阐述可变与不可变类型的特性、应用场景以及选择。
+
+#### 7.4.1 可变类型与不可变类型概述
+
+- **可变类型（Mutable）**：对象创建后，其内容可以被改变，且内存地址不变。
+  - **常见可变类型**：`list`（列表）、`dict`（字典）、`set`（集合）、`bytearray` 等。
+
+- **不可变类型（Immutable）**：对象创建后，其内容不可改变，任何对其修改的操作都会创建新的对象。
+  - **常见不可变类型**：`int`（整数）、`float`（浮点数）、`str`（字符串）、`tuple`（元组）、`frozenset`、`bytes` 等。
+
+**选择合适类型的重要性**：
+- **数据安全性**：在多线程环境或函数调用中，不可变类型可以防止数据被意外修改。
+- **性能考虑**：不可变类型在某些情况下可以提高性能，因为它们可以被哈希化，用于键值存储等。
+- **灵活性**：可变类型提供了更大的灵活性，适用于需要频繁修改数据的场景。
+
+#### 7.4.2 实例：学生成绩管理系统
+
+**场景描述**：
+
+假设我们正在开发一个简单的学生成绩管理系统，需要存储学生的信息，包括姓名、年龄和所选课程。课程列表可能会在学期内发生变化（添加或删除课程）。我们将通过这个实例来展示可变与不可变类型的应用与选择。
+
+**代码实现**：
+
+```python
+# 定义学生类，使用不可变和可变类型
+class Student:
+    def __init__(self, name, age, courses):
+        self.name = name            # 不可变类型：字符串
+        self.age = age              # 不可变类型：整数
+        self.courses = courses      # 可变类型：列表
+
+    def add_course(self, course):
+        """
+        添加课程到学生的课程列表中
+        """
+        self.courses.append(course)
+        print(f"课程 '{course}' 已添加到 {self.name} 的课程列表中。")
+
+    def remove_course(self, course):
+        """
+        从学生的课程列表中移除课程
+        """
+        if course in self.courses:
+            self.courses.remove(course)
+            print(f"课程 '{course}' 已从 {self.name} 的课程列表中移除。")
+        else:
+            print(f"课程 '{course}' 不在 {self.name} 的课程列表中。")
+
+    def display_info(self):
+        """
+        显示学生的详细信息
+        """
+        print(f"学生姓名: {self.name}")
+        print(f"年龄: {self.age}")
+        print(f"课程列表: {', '.join(self.courses)}")
+```
+
+**详细解释**:
+
+- **不可变类型的应用**：
+  - `name` 和 `age` 属性分别使用了字符串和整数类型。这些信息一旦设置，通常不需要改变，使用不可变类型可以确保数据的稳定性。
+  - 如果需要修改 `name` 或 `age`，可以通过重新赋值来实现，这将创建新的对象。
+
+- **可变类型的应用**：
+  - `courses` 属性使用了列表类型，因为学生的课程列表可能在学期内发生变化，需要添加或移除课程。
+  - 使用可变类型列表，可以直接在原对象上进行修改，方便且高效。
+
+**使用示例**：
+
+```python
+# 创建学生对象
+student_anna = Student(name="Anna", age=20, courses=["Math", "Physics"])
+
+# 显示学生信息
+student_anna.display_info()
+# 输出:
+# 学生姓名: Anna
+# 年龄: 20
+# 课程列表: Math, Physics
+
+# 添加新课程
+student_anna.add_course("Chemistry")
+# 输出:
+# 课程 'Chemistry' 已添加到 Anna 的课程列表中。
+
+# 再次显示学生信息，验证课程已添加
+student_anna.display_info()
+# 输出:
+# 学生姓名: Anna
+# 年龄: 20
+# 课程列表: Math, Physics, Chemistry
+
+# 移除课程
+student_anna.remove_course("Math")
+# 输出:
+# 课程 'Math' 已从 Anna 的课程列表中移除。
+
+# 显示最终的学生信息
+student_anna.display_info()
+# 输出:
+# 学生姓名: Anna
+# 年龄: 20
+# 课程列表: Physics, Chemistry
+```
+
+**深入探讨：可变与不可变类型在函数调用中的行为差异**
+
+**示例代码**：
+
+```python
+def update_age(student, new_age):
+    """
+    尝试更新学生的年龄
+    """
+    student.age = new_age
+    print(f"学生 {student.name} 的年龄已更新为 {student.age}")
+
+def update_courses(student, new_courses):
+    """
+    尝试更新学生的课程列表
+    """
+    student.courses = new_courses
+    print(f"学生 {student.name} 的课程列表已更新为 {', '.join(student.courses)}")
+
+# 创建学生对象
+student_bob = Student(name="Bob", age=22, courses=["English", "History"])
+
+# 更新年龄（不可变类型）
+update_age(student_bob, 23)
+student_bob.display_info()
+# 输出:
+# 学生 Bob 的年龄已更新为 23
+# 学生姓名: Bob
+# 年龄: 23
+# 课程列表: English, History
+
+# 更新课程列表（可变类型）
+new_courses_list = ["Art", "Biology"]
+update_courses(student_bob, new_courses_list)
+student_bob.display_info()
+# 输出:
+# 学生 Bob 的课程列表已更新为 Art, Biology
+# 学生姓名: Bob
+# 年龄: 23
+# 课程列表: Art, Biology
+
+# 尝试在函数外修改 new_courses_list
+new_courses_list.append("Chemistry")
+print(f"在函数外修改后的课程列表: {', '.join(new_courses_list)}")
+student_bob.display_info()
+# 输出:
+# 在函数外修改后的课程列表: Art, Biology, Chemistry
+# 学生姓名: Bob
+# 年龄: 23
+# 课程列表: Art, Biology, Chemistry
+```
+
+**解释**：
+
+- **不可变类型的行为**：
+  - 当我们在 `update_age` 函数中更新 `student.age` 时，实际上是创建了一个新的整数对象并赋值给 `age` 属性。由于整数是不可变类型，修改操作不会影响其他引用。
+
+- **可变类型的行为**：
+  - 在 `update_courses` 函数中，我们将一个新的列表 `new_courses_list` 赋值给 `student.courses`。由于列表是可变类型，对 `new_courses_list` 的任何修改都会直接影响到 `student.courses`。
+  - 当我们在函数外部修改 `new_courses_list`（添加 "Chemistry" 课程）时，`student_bob` 的课程列表也随之改变。这是因为 `student.courses` 和 `new_courses_list` 引用了同一个列表对象。
+
+**避免意外修改的方法**：
+
+- **使用拷贝**：在将可变对象赋值或传递给函数时，使用对象的副本可以避免意外修改。
+
+**示例**：
+
+```python
+import copy
+
+def update_courses_safe(student, new_courses):
+    """
+    安全地更新学生的课程列表，使用列表的副本
+    """
+    student.courses = copy.deepcopy(new_courses)
+    print(f"学生 {student.name} 的课程列表已安全更新为 {', '.join(student.courses)}")
+
+# 创建学生对象
+student_carol = Student(name="Carol", age=21, courses=["Economics", "Philosophy"])
+
+# 原始课程列表
+original_courses = ["Music", "Dance"]
+
+# 使用安全更新函数
+update_courses_safe(student_carol, original_courses)
+student_carol.display_info()
+# 输出:
+# 学生 Carol 的课程列表已安全更新为 Music, Dance
+# 学生姓名: Carol
+# 年龄: 21
+# 课程列表: Music, Dance
+
+# 修改 original_courses，不会影响 student_carol 的课程列表
+original_courses.append("Theater")
+print(f"修改后的原始课程列表: {', '.join(original_courses)}")
+student_carol.display_info()
+# 输出:
+# 修改后的原始课程列表: Music, Dance, Theater
+# 学生姓名: Carol
+# 年龄: 21
+# 课程列表: Music, Dance
+```
+
+**解释**：
+
+- 使用 `copy.deepcopy()` 创建了 `new_courses` 的深拷贝，从而确保对原始列表的修改不会影响到学生对象的课程列表。
+
+**总结**：
+
+- **可变类型** 适用于需要频繁修改的数据结构，但在传递和共享时需要谨慎，避免意外修改。
+- **不可变类型** 提供了数据的稳定性和安全性，适用于不需要修改的数据，特别是在多线程环境或作为函数参数时。
+- **拷贝机制**（浅拷贝和深拷贝）可以帮助我们在需要时保护数据不被意外修改。
+
+### 7.5 习题
+
+#### 1. 购物清单管理
+
+**描述**:
+编写一个程序来管理购物清单。用户可以添加商品到购物清单、移除商品、查看清单中所有商品以及计算清单中商品的总数量。购物清单应该以列表的形式存储，并且程序应该能够避免重复添加相同的商品。
+
+**要求**:
+1. 使用列表来存储购物清单。
+2. 添加商品时检查是否已存在，避免重复。
+3. 提供一个选项来显示清单中的所有商品。
+4. 提供一个选项来计算清单中的商品总数。
+
+#### 2. 学生成绩管理系统
+
+**描述**:
+创建一个学生成绩管理系统，要求程序能够记录每个学生的姓名和他们的考试成绩（例如数学、英语、科学等）。系统还应能够计算每个学生的平均成绩，并显示班级中所有学生的平均成绩。
+
+**要求**:
+1. 使用字典存储每个学生的姓名和对应的成绩。
+2. 支持添加学生和成绩、更新学生的成绩。
+3. 计算并显示每个学生的平均成绩。
+4. 计算并显示班级中所有学生的平均成绩。
+
+#### 3. 图书馆书籍管理
+
+**描述**:
+设计一个图书馆书籍管理系统，该系统能够记录书籍的标题、作者、ISBN 编号，并支持查询书籍的功能。图书馆还应能够处理借书和还书的操作。
+
+**要求**:
+1. 使用字典或集合来存储每本书的信息（标题、作者、ISBN）。
+2. 提供查询功能，可以通过标题或作者来查找书籍。
+3. 提供借书和还书功能，借书后应更新库存。
+4. 确保不能借出已被借出的书籍，已借出的书籍应显示在借出列表中。
+
+#### 4. 多边形面积计算
+
+**描述**:
+编写一个程序，计算任意多边形的面积。用户需要按顺序输入多边形的顶点坐标，程序应使用几何公式计算并输出面积。需要使用数据结构来存储顶点和计算结果。
+
+**要求**:
+1. 使用元组存储多边形的顶点坐标。
+2. 通过公式计算多边形的面积。
+3. 使用字典存储并输出顶点坐标和对应的面积。
+
 
 ## 8. 基本算法与数据处理
    - **排序算法**
